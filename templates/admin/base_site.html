@@ -1,0 +1,92 @@
+{% extends "admin/base_site.html" %}
+{% load static %}
+
+{% block title %}{{ title }} | {{ site_title|default:_('The Turing Club Admin') }}{% endblock %}
+
+{% block branding %}
+<h1 id="site-name">
+    <img src="{% static 'assets/logo.png' %}" alt="The Turing Club Logo" height="40" style="margin-right: 10px; vertical-align: middle;">
+    <a href="{% url 'turingadmin:index' %}">{{ site_header|default:_('The Turing Club Administration') }}</a>
+</h1>
+{% endblock %}
+
+{% block extrastyle %}
+{{ block.super }}
+<style>
+    :root {
+        --primary: #2c3e50;
+        --secondary: #3498db;
+        --accent: #e74c3c;
+        --primary-fg: #fff;
+        --body-fg: #333;
+        --body-bg: #f8f8f8;
+        --darkened-bg: #f2f2f2;
+    }
+    
+    #header {
+        background: var(--primary);
+        color: var(--primary-fg);
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    
+    .module h2, .module caption, .inline-group h2 {
+        background: var(--secondary);
+    }
+    
+    a:link, a:visited {
+        color: var(--secondary);
+    }
+    
+    .button, input[type=submit], input[type=button], .submit-row input, a.button {
+        background: var(--secondary);
+    }
+    
+    .button.default, input[type=submit].default, .submit-row input.default {
+        background: var(--accent);
+    }
+    
+    .button:hover, input[type=submit]:hover, input[type=button]:hover {
+        background: #2980b9;
+    }
+    
+    .button.default:hover, input[type=submit].default:hover {
+        background: #c0392b;
+    }
+    
+    /* Custom Dashboard Styling */
+    .dashboard .module {
+        border-radius: 5px;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        border: none;
+    }
+    
+    .dashboard .module table th {
+        background: var(--secondary);
+        color: white;
+    }
+    
+    /* Field styling */
+    .field-display_image img {
+        transition: transform 0.2s;
+    }
+    
+    .field-display_image img:hover {
+        transform: scale(1.5);
+    }
+    
+    /* Improve form styling */
+    .aligned label {
+        color: #555;
+        font-weight: 500;
+    }
+    
+    /* Footer styling */
+    #footer {
+        padding: 20px;
+        text-align: center;
+        background: var(--darkened-bg);
+    }
+</style>
+{% endblock %}
+
+{% block nav-global %}{% endblock %}

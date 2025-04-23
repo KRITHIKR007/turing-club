@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ project.title }} - The Turing Club (TTC){% endblock %}
+
+{% block content %}
+<section class="pt-32 pb-24 bg-[#090909]">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="mb-8">
+            <a href="{% url 'project_list' %}" class="inline-flex items-center text-blue-400 hover:text-blue-300 mb-6">
+                <i class="fas fa-arrow-left mr-2"></i> Back to projects
+            </a>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
+                <div>
+                    {% if project.image %}
+                    <div class="mb-6">
+                        <img src="{{ project.image.url }}" alt="{{ project.title }}" class="w-full h-auto object-cover rounded-xl">
+                    </div>
+                    {% endif %}
+                    
+                    <div class="space-y-4">
+                        {% if project.additional_images.all %}
+                        <div class="grid grid-cols-3 gap-4">
+                            {% for img in project.additional_images.all %}
+                            <div class="aspect-square rounded-lg overflow-hidden">
+                                <img src="{{ img.image.url }}" alt="{{ project.title }}" class="w-full h-full object-cover">
+                            </div>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <div class="space-y-6">
+                    <h1 class="text-3xl md:text-4xl font-bold">{{ project.title }}</h1>
+                    
+                    <div class="flex flex-wrap gap-2">
+                        {% for tech in project.technologies.all %}
+                        <span class="px-3 py-1 bg-blue-500/10 text-blue-400 rounded-full text-sm">{{ tech.name }}</span>
+                        {% endfor %}
+                    </div>
+                    
+                    <div class="prose prose-lg max-w-none prose-invert prose-blue">
+                        {{ project.description|safe }}
+                    </div>
+                    
+                    <div class="pt-4 space-y-4">
+                        {% if project.github_link %}
+                        <div>
+                            <h4 class="text-sm uppercase tracking-wider text-gray-500 mb-2">GitHub Repository</h4>
+                            <a href="{{ project.github_link }}" target="_blank" rel="noopener" 
+                               class="inline-flex items-center text-blue-400 hover:text-blue-300">
+                                <i class="fab fa-github mr-2"></i> View Source Code
+                            </a>
+                        </div>
+                        {% endif %}
+                        
+                        {% if project.live_url %}
+                        <div>
+                            <h4 class="text-sm uppercase tracking-wider text-gray-500 mb-2">Live Demo</h4>
+                            <a href="{{ project.live_url }}" target="_blank" rel="noopener"
+                               class="inline-flex items-center text-blue-400 hover:text-blue-300">
+                                <i class="fas fa-external-link-alt mr-2"></i> Visit Website
+                            </a>
+                        </div>
+                        {% endif %}
+                        
+                        <div>
+                            <h4 class="text-sm uppercase tracking-wider text-gray-500 mb-2">Project Date</h4>
+                            <p>{{ project.date|date:"F Y" }}</p>
+                        </div>
+                        
+                        {% if project.team_members.all %}
+                        <div>
+                            <h4 class="text-sm uppercase tracking-wider text-gray-500 mb-2">Team Members</h4>
+                            <div class="flex flex-wrap gap-2">
+                                {% for member in project.team_members.all %}
+                                <span class="inline-flex items-center">
+                                    {% if member.profile.avatar %}
+                                    <img src="{{ member.profile.avatar.url }}" alt="{{ member }}" class="w-6 h-6 rounded-full mr-2">
+                                    {% endif %}
+                                    <span>{{ member.get_full_name|default:member.username }}</span>
+                                </span>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

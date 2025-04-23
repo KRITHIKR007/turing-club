@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Articles - The Turing Club (TTC){% endblock %}
+
+{% block content %}
+<section class="pt-32 pb-24 bg-[#090909]">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-16">
+            <h1 class="text-4xl md:text-5xl font-bold mb-4">TTC Articles</h1>
+            <p class="text-gray-400 max-w-2xl mx-auto">
+                Insights, tutorials, and updates from The Turing Club
+            </p>
+        </div>
+        
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {% for article in articles %}
+            <div class="glass-card rounded-xl overflow-hidden group">
+                <div class="relative">
+                    {% if article.image %}
+                    <img src="{{ article.image.url }}" alt="{{ article.title }}" class="w-full h-52 object-cover">
+                    {% else %}
+                    <div class="w-full h-52 bg-gradient-to-r from-blue-500/20 to-purple-500/20 flex items-center justify-center">
+                        <i class="fas fa-newspaper text-4xl text-blue-500/50"></i>
+                    </div>
+                    {% endif %}
+                </div>
+                <div class="p-6">
+                    <div class="flex items-center mb-3 text-sm text-gray-400">
+                        <span>{{ article.pub_date|date:"F j, Y" }}</span>
+                        {% if article.is_featured %}
+                        <span class="ml-3 px-2 py-1 text-xs rounded bg-blue-500/20 text-blue-400">Featured</span>
+                        {% endif %}
+                    </div>
+                    <h3 class="text-xl font-bold mb-3 group-hover:text-blue-400 transition-colors">{{ article.title }}</h3>
+                    <p class="text-gray-400 text-sm mb-6">{{ article.content|striptags|truncatechars:150 }}</p>
+                    <div class="flex justify-between items-center">
+                        <div class="flex items-center">
+                            {% if article.author.profile.avatar %}
+                            <img src="{{ article.author.profile.avatar.url }}" alt="{{ article.author }}" class="w-8 h-8 rounded-full mr-2">
+                            {% else %}
+                            <div class="w-8 h-8 rounded-full bg-blue-500/20 flex items-center justify-center mr-2">
+                                <i class="fas fa-user text-blue-500 text-xs"></i>
+                            </div>
+                            {% endif %}
+                            <span class="text-sm text-gray-400">{{ article.author.get_full_name|default:article.author.username }}</span>
+                        </div>
+                        <a href="{% url 'article_detail' article.slug %}" class="text-blue-400 hover:text-blue-300">Read more →</a>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="lg:col-span-3 text-center py-16">
+                <i class="fas fa-newspaper text-5xl text-gray-700 mb-4"></i>
+                <h3 class="text-xl font-medium mb-2">No articles available yet</h3>
+                <p class="text-gray-400">Check back soon for updates and insights!</p>
+            </div>
+            {% endfor %}
+        </div>
+        
+        {% if articles.has_other_pages %}
+        <div class="mt-16 flex justify-center">
+            <div class="flex space-x-2">
+                {% if articles.has_previous %}
+                <a href="?page={{ articles.previous_page_number }}" class="px-4 py-2 rounded-lg bg-gray-800 hover:bg-gray-700 transition-colors">
+                    <i class="fas fa-chevron-left"></i>
+                </a>
+                {% else %}
+                <span class="px-4 py-2 rounded-lg bg-gray-800 opacity-50 cursor-not-allowed">
+                    <i class="fas fa-chevron-left"></i>
+                </span>
+                {% endif %}
+                
+                {% for i in articles.paginator.page_range %}
+                    {% if articles.number == i %}
+                    <span class="px-4 py-2 rounded-lg bg-blue-500 text-white">{{ i }}</span>
+                    {% else %}
+                    <a href="?page={{ i }}" class="px-4 py-2 rounded-lg bg-gray-800 hover:bg-gray-700 transition-colors">{{ i }}</a>
+                    {% endif %}
+                {% endfor %}
+                
+                {% if articles.has_next %}
+                <a href="?page={{ articles.next_page_number }}" class="px-4 py-2 rounded-lg bg-gray-800 hover:bg-gray-700 transition-colors">
+                    <i class="fas fa-chevron-right"></i>
+                </a>
+                {% else %}
+                <span class="px-4 py-2 rounded-lg bg-gray-800 opacity-50 cursor-not-allowed">
+                    <i class="fas fa-chevron-right"></i>
+                </span>
+                {% endif %}
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

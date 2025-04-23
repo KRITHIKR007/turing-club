@@ -1,0 +1,146 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ event.title }} - The Turing Club (TTC){% endblock %}
+
+{% block content %}
+<section class="pt-32 pb-24 bg-[#090909]">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+        <!-- Event Header -->
+        <div class="mb-12">
+            <a href="{% url 'event_list' %}" class="inline-flex items-center text-blue-400 hover:text-blue-500 mb-6">
+                <i class="fas fa-arrow-left mr-2"></i>
+                Back to Events
+            </a>
+            
+            <div class="glass-card rounded-xl overflow-hidden">
+                <div class="relative h-72 sm:h-96">
+                    {% if event.image %}
+                    <img src="{{ event.image.url }}" alt="{{ event.title }}" class="w-full h-full object-cover">
+                    {% else %}
+                    <div class="w-full h-full bg-blue-500/10 flex items-center justify-center">
+                        <i class="fas fa-calendar-alt text-6xl text-blue-500/50"></i>
+                    </div>
+                    {% endif %}
+                </div>
+                
+                <div class="p-8">
+                    <div class="flex flex-wrap justify-between items-start mb-6">
+                        <h1 class="text-3xl sm:text-4xl font-bold mr-4">{{ event.title }}</h1>
+                        {% if event.date >= current_date %}
+                        <div class="px-4 py-1 rounded-full bg-blue-500 text-white text-sm font-medium mt-2">
+                            Upcoming
+                        </div>
+                        {% else %}
+                        <div class="px-4 py-1 rounded-full bg-gray-700 text-white text-sm font-medium mt-2">
+                            Completed
+                        </div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                        <div class="md:col-span-2">
+                            <!-- Event description -->
+                            <div class="prose prose-invert max-w-none">
+                                <p>{{ event.description }}</p>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <!-- Event details -->
+                            <div class="glass-card p-6 rounded-xl">
+                                <h3 class="text-xl font-semibold mb-4">Event Details</h3>
+                                <ul class="space-y-4 text-gray-300">
+                                    <li class="flex">
+                                        <i class="fas fa-calendar w-6 text-blue-400 mt-1"></i>
+                                        <div class="ml-3">
+                                            <p class="text-gray-400 text-sm">Date & Time</p>
+                                            <p>{{ event.date|date:"F d, Y" }} at {{ event.date|date:"g:i A" }}</p>
+                                        </div>
+                                    </li>
+                                    <li class="flex">
+                                        <i class="fas fa-map-marker-alt w-6 text-blue-400 mt-1"></i>
+                                        <div class="ml-3">
+                                            <p class="text-gray-400 text-sm">Location</p>
+                                            <p>{{ event.location }}</p>
+                                        </div>
+                                    </li>
+                                    {% if event.organizer %}
+                                    <li class="flex">
+                                        <i class="fas fa-user w-6 text-blue-400 mt-1"></i>
+                                        <div class="ml-3">
+                                            <p class="text-gray-400 text-sm">Organizer</p>
+                                            <p>{{ event.organizer }}</p>
+                                        </div>
+                                    </li>
+                                    {% endif %}
+                                    {% if event.contact_email %}
+                                    <li class="flex">
+                                        <i class="fas fa-envelope w-6 text-blue-400 mt-1"></i>
+                                        <div class="ml-3">
+                                            <p class="text-gray-400 text-sm">Contact</p>
+                                            <a href="mailto:{{ event.contact_email }}" class="text-blue-400 hover:underline">
+                                                {{ event.contact_email }}
+                                            </a>
+                                        </div>
+                                    </li>
+                                    {% endif %}
+                                </ul>
+                                
+                                {% if event.date >= current_date and event.registration_url %}
+                                <div class="mt-6">
+                                    <a href="{{ event.registration_url }}" target="_blank" class="block w-full py-3 rounded-lg bg-blue-500 hover:bg-blue-600 transition-colors text-center font-medium">
+                                        Register Now
+                                    </a>
+                                </div>
+                                {% endif %}
+                            </div>
+                            
+                            <!-- Tags -->
+                            {% if event.tags %}
+                            <div class="mt-6">
+                                <h4 class="text-sm text-gray-400 mb-3">Categories</h4>
+                                <div class="flex flex-wrap gap-2">
+                                    {% for tag in event.get_tags_list %}
+                                    <span class="px-2 py-1 text-xs 
+                                        {% if 'Web Dev' in tag %}bg-blue-500/10 text-blue-400{% endif %}
+                                        {% if 'AI/ML' in tag %}bg-purple-500/10 text-purple-400{% endif %}
+                                        {% if 'IoT' in tag %}bg-green-500/10 text-green-400{% endif %}
+                                        {% if 'Data Science' in tag %}bg-yellow-500/10 text-yellow-400{% endif %}
+                                        {% if 'Cybersecurity' in tag %}bg-red-500/10 text-red-400{% endif %}
+                                        {% if 'Cloud Computing' in tag %}bg-sky-500/10 text-sky-400{% endif %}
+                                        {% if not 'Web Dev' in tag and not 'AI/ML' in tag and not 'IoT' in tag and not 'Data Science' in tag and not 'Cybersecurity' in tag and not 'Cloud Computing' in tag %}bg-gray-500/10 text-gray-400{% endif %}
+                                        rounded-full">{{ tag }}</span>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Event Gallery -->
+        {% if related_images.exists %}
+        <div class="mt-16">
+            <div class="flex items-center justify-between mb-8">
+                <h2 class="text-2xl md:text-3xl font-bold">Event Gallery</h2>
+                <div class="h-0.5 bg-white/5 flex-1 ml-6"></div>
+            </div>
+            
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                {% for image in related_images %}
+                <div class="glass-card rounded-xl overflow-hidden group">
+                    <img src="{{ image.image.url }}" alt="{{ image.title }}" class="w-full h-48 object-cover transition-transform duration-500 group-hover:scale-110">
+                    <div class="p-4">
+                        <p class="text-sm text-gray-400">{{ image.title }}</p>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

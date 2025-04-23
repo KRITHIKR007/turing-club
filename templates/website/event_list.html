@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Events - The Turing Club (TTC){% endblock %}
+
+{% block content %}
+<section class="pt-32 pb-24 bg-[#090909]">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-16">
+            <h1 class="text-4xl md:text-5xl font-bold mb-4">TTC Events</h1>
+            <p class="text-xl text-gray-400 max-w-3xl mx-auto">Explore our upcoming and past events organized by The Turing Club.</p>
+        </div>
+        
+        {% if upcoming_events %}
+        <div class="mb-20">
+            <h2 class="text-2xl font-bold mb-8 text-center">Upcoming Events</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {% for event in upcoming_events %}
+                <div class="bg-gray-900 rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-shadow">
+                    {% if event.image %}
+                    <div class="aspect-video">
+                        <img src="{{ event.image.url }}" alt="{{ event.title }}" class="w-full h-full object-cover">
+                    </div>
+                    {% endif %}
+                    
+                    <div class="p-6">
+                        <div class="mb-4">
+                            <div class="text-blue-400 text-sm mb-1">
+                                <span>{{ event.date|date:"M d, Y" }} at {{ event.time|time:"g:i A" }}</span>
+                            </div>
+                            <h3 class="font-bold text-xl mb-2">{{ event.title }}</h3>
+                            <p class="text-gray-400 line-clamp-2">{{ event.description|truncatewords:25 }}</p>
+                        </div>
+                        
+                        <div class="flex justify-between items-center">
+                            <div class="flex items-center">
+                                <i class="fas fa-map-marker-alt text-blue-400 mr-2"></i>
+                                <span class="text-sm text-gray-400">{{ event.location }}</span>
+                            </div>
+                            <a href="{% url 'event_detail' event.slug %}" class="text-blue-400 hover:text-blue-300">
+                                Details <i class="fas fa-arrow-right ml-1"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+        
+        {% if past_events %}
+        <div>
+            <h2 class="text-2xl font-bold mb-8 text-center">Past Events</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {% for event in past_events %}
+                <div class="bg-gray-900 rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-shadow">
+                    {% if event.image %}
+                    <div class="aspect-video">
+                        <img src="{{ event.image.url }}" alt="{{ event.title }}" class="w-full h-full object-cover">
+                    </div>
+                    {% endif %}
+                    
+                    <div class="p-6">
+                        <div class="mb-4">
+                            <div class="text-gray-500 text-sm mb-1">
+                                <span>{{ event.date|date:"M d, Y" }}</span>
+                            </div>
+                            <h3 class="font-bold text-xl mb-2">{{ event.title }}</h3>
+                            <p class="text-gray-400 line-clamp-2">{{ event.description|truncatewords:25 }}</p>
+                        </div>
+                        
+                        <div class="flex justify-between items-center">
+                            <div class="flex items-center">
+                                <i class="fas fa-map-marker-alt text-gray-500 mr-2"></i>
+                                <span class="text-sm text-gray-400">{{ event.location }}</span>
+                            </div>
+                            <a href="{% url 'event_detail' event.slug %}" class="text-blue-400 hover:text-blue-300">
+                                Details <i class="fas fa-arrow-right ml-1"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% else %}
+        <div class="text-center py-16">
+            <p class="text-gray-400">No past events available at this time.</p>
+        </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

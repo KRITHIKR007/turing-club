@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="py-24 relative bg-[#090909]">
+    <div class="max-w-md mx-auto px-4">
+        <div class="glass-card p-8 md:p-12 rounded-2xl">
+            <h2 class="text-3xl font-bold bg-gradient-to-r from-blue-500 to-purple-500 text-transparent bg-clip-text mb-6">
+                Create an Account
+            </h2>
+            
+            {% if form.errors %}
+            <div class="bg-red-500/10 border border-red-500/30 text-red-400 p-4 rounded-lg mb-6">
+                <p>Please correct the following errors:</p>
+                {{ form.errors }}
+            </div>
+            {% endif %}
+            
+            <form method="post" action="{% url 'signup' %}" class="space-y-6">
+                {% csrf_token %}
+                
+                <div>
+                    <label for="id_username" class="block text-sm font-medium text-gray-400 mb-2">Username</label>
+                    <input type="text" name="username" id="id_username" autocomplete="username" required 
+                        class="w-full px-4 py-3 rounded-lg bg-black/50 border border-gray-700 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 focus:outline-none text-white transition-all duration-300">
+                    <p class="text-xs text-gray-500 mt-1">Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only.</p>
+                </div>
+                
+                <div>
+                    <label for="id_password1" class="block text-sm font-medium text-gray-400 mb-2">Password</label>
+                    <input type="password" name="password1" id="id_password1" autocomplete="new-password" required 
+                        class="w-full px-4 py-3 rounded-lg bg-black/50 border border-gray-700 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 focus:outline-none text-white transition-all duration-300">
+                    <ul class="text-xs text-gray-500 mt-1 list-disc pl-5">
+                        <li>Your password can't be too similar to your other personal information.</li>
+                        <li>Your password must contain at least 8 characters.</li>
+                        <li>Your password can't be a commonly used password.</li>
+                        <li>Your password can't be entirely numeric.</li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <label for="id_password2" class="block text-sm font-medium text-gray-400 mb-2">Confirm Password</label>
+                    <input type="password" name="password2" id="id_password2" autocomplete="new-password" required 
+                        class="w-full px-4 py-3 rounded-lg bg-black/50 border border-gray-700 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 focus:outline-none text-white transition-all duration-300">
+                    <p class="text-xs text-gray-500 mt-1">Enter the same password as before, for verification.</p>
+                </div>
+                
+                <button type="submit" 
+                    class="w-full py-3 px-6 rounded-lg bg-gradient-to-r from-blue-500 to-purple-500 text-white font-medium hover:shadow-lg hover:shadow-blue-500/25 transition-all duration-300 transform hover:scale-[1.02]">
+                    Sign Up
+                </button>
+            </form>
+            
+            <div class="mt-6 text-center text-gray-400">
+                <p>Already have an account? <a href="{% url 'login' %}" class="text-blue-400 hover:text-blue-300">Login</a></p>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

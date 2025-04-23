@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en" class="scroll-smooth">
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>{% block title %}The Turing Club (TTC) - Tech Innovation Hub{% endblock %}</title>
+   
+   <!-- Favicon -->
+   <link rel="icon" href="{% static 'assets/logo.png' %}" type="image/png">
+  
+   <!-- Stylesheets -->
+   <script src="https://cdn.tailwindcss.com"></script>
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+   <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+   <link rel="stylesheet" href="{% static 'css/style.css' %}">
+   <link rel="preconnect" href="https://fonts.googleapis.com">
+   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+   <link rel="preload" href="{% static 'hero-visual.png' %}" as="image">
+   
+   {% block extra_css %}{% endblock %}
+</head>
+<body class="text-white antialiased">
+   <!-- Header/Navigation -->
+   <nav class="fixed w-full z-50 bg-[#090909]/90 backdrop-blur-sm border-b border-white/5">
+       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+           <div class="flex items-center justify-between h-16">
+               <!-- Logo -->
+               <a href="{% url 'index' %}" class="flex items-center space-x-3">
+                   <img src="{% static 'assets/logo.png' %}" alt="TTC Logo" class="h-8 w-auto">
+                   <span class="text-xl font-bold text-white">TTC</span>
+               </a>
+
+               <!-- Desktop Navigation -->
+               <div class="hidden md:flex items-center space-x-8">
+                   <a href="{% url 'index' %}#about" class="text-sm text-gray-300 hover:text-white transition-colors">About</a>
+                   <a href="{% url 'index' %}#what-we-do" class="text-sm text-gray-300 hover:text-white transition-colors">What We Do</a>
+                   <a href="{% url 'index' %}#events" class="text-sm text-gray-300 hover:text-white transition-colors">Events</a>
+                   <a href="{% url 'index' %}#team" class="text-sm text-gray-300 hover:text-white transition-colors">Team</a>
+                   <a href="{% url 'index' %}#projects" class="text-sm text-gray-300 hover:text-white transition-colors">Projects</a>
+                   <a href="{% url 'index' %}#achievements" class="text-sm text-gray-300 hover:text-white transition-colors">Achievements</a>
+                   <a href="{% url 'index' %}#gallery" class="text-sm text-gray-300 hover:text-white transition-colors">Gallery</a>
+                   <a href="{% url 'index' %}#blog" class="text-sm text-gray-300 hover:text-white transition-colors">Blog</a>
+                   
+                   {% if user.is_authenticated %}
+                   <div class="relative group">
+                       <button class="text-sm text-white flex items-center space-x-1">
+                           <span>{{ user.username }}</span>
+                           <i class="fas fa-chevron-down text-xs"></i>
+                       </button>
+                       <div class="absolute right-0 mt-2 w-48 bg-[#111111] rounded-lg shadow-lg py-2 border border-gray-800 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300">
+                           <a href="{% url 'profile' %}" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-800 hover:text-white">Profile</a>
+                           <a href="{% url 'logout' %}" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-800 hover:text-white">Logout</a>
+                       </div>
+                   </div>
+                   {% else %}
+                   <a href="{% url 'signup' %}" class="px-4 py-2 text-sm rounded-lg bg-blue-500 text-white hover:bg-blue-600">
+                       Join Us
+                   </a>
+                   <a href="{% url 'login' %}" class="px-4 py-2 text-sm rounded-lg bg-transparent border border-gray-700 hover:border-blue-500 hover:text-blue-400 transition-colors">
+                       Login
+                   </a>
+                   {% endif %}
+               </div>
+
+               <!-- Mobile Menu Button -->
+               <button class="md:hidden text-white" id="mobileMenuBtn">
+                   <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-16 6h16"/>
+                   </svg>
+               </button>
+           </div>
+       </div>
+   </nav>
+
+   <!-- Mobile Menu -->
+   <div id="mobileMenu" class="md:hidden fixed inset-0 bg-black/90 backdrop-blur-sm z-40 transform transition-transform duration-300 translate-y-full">
+       <div class="flex flex-col items-center justify-center h-full space-y-8">
+           <div class="flex items-center space-x-3 mb-6">
+               <img src="{% static 'assets/logo.png' %}" alt="TTC Logo" class="h-10 w-auto">
+               <span class="text-2xl font-bold text-white">TTC</span>
+           </div>
+           <a href="{% url 'index' %}#about" class="text-lg text-gray-300 hover:text-white transition-colors">About</a>
+           <a href="{% url 'index' %}#what-we-do" class="text-lg text-gray-300 hover:text-white transition-colors">What We Do</a>
+           <a href="{% url 'index' %}#events" class="text-lg text-gray-300 hover:text-white transition-colors">Events</a>
+           <a href="{% url 'index' %}#team" class="text-lg text-gray-300 hover:text-white transition-colors">Team</a>
+           <a href="{% url 'index' %}#projects" class="text-lg text-gray-300 hover:text-white transition-colors">Projects</a>
+           <a href="{% url 'index' %}#achievements" class="text-lg text-gray-300 hover:text-white transition-colors">Achievements</a>
+           <a href="{% url 'index' %}#gallery" class="text-lg text-gray-300 hover:text-white transition-colors">Gallery</a>
+           <a href="{% url 'index' %}#blog" class="text-lg text-gray-300 hover:text-white transition-colors">Blog</a>
+           
+           {% if user.is_authenticated %}
+           <div class="space-y-4">
+               <a href="{% url 'profile' %}" class="block px-6 py-2 text-lg rounded-lg bg-blue-500 text-white">My Profile</a>
+               <a href="{% url 'logout' %}" class="block px-6 py-2 text-lg rounded-lg bg-transparent border border-gray-700 text-white">Logout</a>
+           </div>
+           {% else %}
+           <div class="space-y-4">
+               <a href="{% url 'signup' %}" class="block px-6 py-2 text-lg rounded-lg bg-blue-500 text-white">Join Us</a>
+               <a href="{% url 'login' %}" class="block px-6 py-2 text-lg rounded-lg bg-transparent border border-gray-700 text-white">Login</a>
+           </div>
+           {% endif %}
+       </div>
+       
+       <!-- Close button -->
+       <button id="closeMobileMenu" class="absolute top-4 right-4 text-white">
+           <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+           </svg>
+       </button>
+   </div>
+
+   <!-- Messages/Alerts -->
+   {% if messages %}
+   <div class="fixed top-20 right-4 z-50 w-80">
+       {% for message in messages %}
+       <div class="alert p-4 rounded-lg shadow-lg mb-4 {% if message.tags == 'error' %}bg-red-500/90{% elif message.tags == 'success' %}bg-green-500/90{% else %}bg-blue-500/90{% endif %} backdrop-blur-md">
+           <div class="flex justify-between">
+               <div class="flex items-center">
+                   {% if message.tags == 'error' %}
+                       <i class="fas fa-exclamation-circle mr-2"></i>
+                   {% elif message.tags == 'success' %}
+                       <i class="fas fa-check-circle mr-2"></i>
+                   {% else %}
+                       <i class="fas fa-info-circle mr-2"></i>
+                   {% endif %}
+                   <p>{{ message }}</p>
+               </div>
+               <button class="close-alert text-white hover:text-gray-200">&times;</button>
+           </div>
+       </div>
+       {% endfor %}
+   </div>
+   {% endif %}
+
+   <!-- Main Content -->
+   <main>
+       {% block content %}{% endblock %}
+   </main>
+
+   <!-- Footer -->
+   <footer class="bg-[#090909] border-t border-white/5">
+       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+           <!-- Main Footer -->
+           <div class="grid grid-cols-1 md:grid-cols-4 gap-12 py-16">
+               <!-- Column 1: About -->
+               <div class="space-y-4">
+                   <h3 class="text-xl font-bold">TTC</h3>
+                   <p class="text-gray-400 text-sm">
+                       Empowering students to explore and excel in technology through hands-on learning and innovation.
+                   </p>
+                   <div class="flex space-x-4">
+                       <a href="https://linkedin.com/company/the-turing-club" target="_blank" class="text-gray-400 hover:text-white transition-colors">
+                           <i class="fab fa-linkedin-in"></i>
+                       </a>
+                       <a href="https://github.com/the-turing-club" target="_blank" class="text-gray-400 hover:text-white transition-colors">
+                           <i class="fab fa-github"></i>
+                       </a>
+                       <a href="https://instagram.com/theturingclub" target="_blank" class="text-gray-400 hover:text-white transition-colors">
+                           <i class="fab fa-instagram"></i>
+                       </a>
+                       <a href="https://discord.gg/turingclub" target="_blank" class="text-gray-400 hover:text-white transition-colors">
+                           <i class="fab fa-discord"></i>
+                       </a>
+                   </div>
+               </div>
+
+               <!-- Column 2: Quick Links -->
+               <div class="space-y-4">
+                   <h3 class="text-lg font-semibold">Quick Links</h3>
+                   <ul class="space-y-2">
+                       <li><a href="{% url 'index' %}#about" class="text-gray-400 hover:text-white transition-colors">About Us</a></li>
+                       <li><a href="{% url 'index' %}#what-we-do" class="text-gray-400 hover:text-white transition-colors">What We Do</a></li>
+                       <li><a href="{% url 'index' %}#events" class="text-gray-400 hover:text-white transition-colors">Events</a></li>
+                       <li><a href="{% url 'index' %}#team" class="text-gray-400 hover:text-white transition-colors">Our Team</a></li>
+                       <li><a href="{% url 'index' %}#projects" class="text-gray-400 hover:text-white transition-colors">Projects</a></li>
+                       <li><a href="{% url 'index' %}#achievements" class="text-gray-400 hover:text-white transition-colors">Achievements</a></li>
+                       <li><a href="{% url 'index' %}#gallery" class="text-gray-400 hover:text-white transition-colors">Gallery</a></li>
+                       <li><a href="{% url 'index' %}#blog" class="text-gray-400 hover:text-white transition-colors">Blog</a></li>
+                       <li><a href="{% url 'index' %}#join-form" class="text-gray-400 hover:text-white transition-colors">Join Us</a></li>
+                   </ul>
+               </div>
+
+               <!-- Column 3: Resources -->
+               <div class="space-y-4">
+                   <h3 class="text-lg font-semibold">Resources</h3>
+                   <ul class="space-y-2">
+                       <li>
+                           <a href="#" class="text-gray-400 hover:text-white transition-colors">Blog</a>
+                       </li>
+                       <li>
+                           <a href="#" class="text-gray-400 hover:text-white transition-colors">Projects</a>
+                       </li>
+                       <li>
+                           <a href="#" class="text-gray-400 hover:text-white transition-colors">Documentation</a>
+                       </li>
+                       <li>
+                           <a href="#" class="text-gray-400 hover:text-white transition-colors">Resources</a>
+                       </li>
+                   </ul>
+               </div>
+
+               <!-- Column 4: Newsletter -->
+               <div class="space-y-4">
+                   <h3 class="text-lg font-semibold">Stay Updated</h3>
+                   <p class="text-gray-400 text-sm">Subscribe to our newsletter for updates and announcements.</p>
+                   <form class="space-y-2">
+                       <div class="relative">
+                           <input 
+                               type="email" 
+                               placeholder="Enter your email" 
+                               class="w-full px-4 py-2 rounded-lg bg-black/50 border border-gray-700 focus:border-indigo-500 focus:outline-none text-white"
+                           >
+                           <button type="submit" class="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white">
+                               <i class="fas fa-arrow-right"></i>
+                           </button>
+                       </div>
+                   </form>
+               </div>
+           </div>
+
+           <!-- Bottom Footer -->
+           <div class="border-t border-white/5 py-6">
+               <div class="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
+                   <div class="text-gray-400 text-sm">
+                       © {% now "Y" %} The Turing Club. All rights reserved.
+                   </div>
+                   <div class="flex space-x-6 text-sm">
+                       <a href="#" class="text-gray-400 hover:text-white transition-colors">Privacy Policy</a>
+                       <a href="#" class="text-gray-400 hover:text-white transition-colors">Terms of Service</a>
+                   </div>
+               </div>
+           </div>
+       </div>
+   </footer>
+
+   <!-- Utility Elements -->
+   <div class="custom-cursor"></div>
+   <button id="backToTop" class="fixed bottom-8 right-8 bg-blue-500 text-white p-3 rounded-full shadow-lg opacity-0 transition-opacity duration-300 hover:bg-blue-600">
+       <i class="fas fa-arrow-up"></i>
+   </button>
+
+   <!-- Scripts -->
+   <script src="{% static 'js/main.js' %}"></script>
+   {% block extra_js %}{% endblock %}
+   
+   <script>
+       // Alert closing functionality
+       document.querySelectorAll('.close-alert').forEach(button => {
+           button.addEventListener('click', () => {
+               const alert = button.closest('.alert');
+               alert.style.opacity = '0';
+               setTimeout(() => {
+                   alert.style.display = 'none';
+               }, 300);
+           });
+       });
+       
+       // Auto-hide alerts after 5 seconds
+       setTimeout(() => {
+           document.querySelectorAll('.alert').forEach(alert => {
+               alert.style.opacity = '0';
+               setTimeout(() => {
+                   alert.style.display = 'none';
+               }, 300);
+           });
+       }, 5000);
+       
+       // Mobile menu toggle
+       document.getElementById('mobileMenuBtn').addEventListener('click', function() {
+           document.getElementById('mobileMenu').classList.remove('translate-y-full');
+       });
+       
+       document.getElementById('closeMobileMenu').addEventListener('click', function() {
+           document.getElementById('mobileMenu').classList.add('translate-y-full');
+       });
+       
+       // Back to top button
+       const backToTopButton = document.getElementById('backToTop');
+       
+       window.addEventListener('scroll', () => {
+           if (window.scrollY > 500) {
+               backToTopButton.classList.add('opacity-100');
+           } else {
+               backToTopButton.classList.remove('opacity-100');
+           }
+       });
+       
+       backToTopButton.addEventListener('click', () => {
+           window.scrollTo({
+               top: 0,
+               behavior: 'smooth'
+           });
+       });
+       
+       // Custom cursor effect
+       const cursor = document.querySelector('.custom-cursor');
+       
+       document.addEventListener('mousemove', (e) => {
+           cursor.style.left = e.clientX + 'px';
+           cursor.style.top = e.clientY + 'px';
+       });
+       
+       document.addEventListener('mousedown', () => {
+           cursor.style.transform = 'scale(0.7)';
+       });
+       
+       document.addEventListener('mouseup', () => {
+           cursor.style.transform = 'scale(1)';
+       });
+   </script>
+</body>
+</html>
