@@ -1,0 +1,1 @@
+web: gunicorn ttcproject.wsgi --log-file -
