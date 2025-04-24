@@ -1,11 +1,18 @@
 #!/bin/bash
 # Build script for Vercel deployment
 
-# Make script executable
+echo "Starting build process..."
+
+# Make script executable (this is important for local testing)
 chmod +x build_files.sh
 
-# Install Python dependencies
-pip install -r requirements.txt
+echo "Installing Python dependencies..."
+# Use Python 3 explicitly with requirements for Vercel
+python3 -m pip install --upgrade pip
+python3 -m pip install -r requirements-vercel.txt
 
-# Collect static files
-python manage.py collectstatic --noinput
+echo "Collecting static files..."
+# Use Python 3 explicitly
+python3 manage.py collectstatic --noinput
+
+echo "Build completed successfully!"
